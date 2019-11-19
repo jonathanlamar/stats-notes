@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# Help String
+USAGE="NAME
+    mdpdf: My script for compiling markdown to pdf with mathjax support
+
+USE:
+    mdpdf -i source.md -o output.pdf    <- Compile source.md to output.pdf
+    mdpdf -h or mdpdf --help            <- prints this string"
+
+# DEFAULTS
+INPUT=""
+OUTPUT=""
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+-h|--help)
+echo "$USAGE"
+exit 0
+shift # past argument
+shift # past value
+;;
+
+-i|--input)
+INPUT="$2"
+shift # past argument
+shift # past value
+;;
+
+-o|--output)
+OUTPUT="$2"
+shift # past argument
+shift # past value
+esac
+done
+
+# Do the thing
+pandoc -f markdown_github+tex_math_dollars $INPUT -o $OUTPUT

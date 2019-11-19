@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Help String
+USAGE="NAME
+    pandoc_loop: My script for looping compiling markdown to pdf with mathjax support
+
+USE:
+    pandoc_loop -f source                   <- Compile source.md to output.pdf
+    pandoc_loop -h or pandoc_loop --help    <- prints this string"
+
+# DEFAULTS
+INPUT=""
+OUTPUT=""
+
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+-h|--help)
+echo "$USAGE"
+exit 0
+shift # past argument
+shift # past value
+;;
+
+-f|--filename)
+INPUT="$2".md
+OUTPUT="$2".pdf
+shift # past argument
+shift # past value
+esac
+done
+
+# Spawn the repl process in background
+while sleep 1 ; do find . -name $INPUT | entr -d mdpdf -i $INPUT -o $OUTPUT ; done

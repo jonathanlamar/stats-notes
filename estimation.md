@@ -110,6 +110,31 @@ __Remark:__ Recall the original definition of Fisher information as the Hessian 
 
 ## Method of Moments
 
+* Requires model to be well-specified (unlike MLE, which will always find the nearest distribution $\mathbb{P}_\theta$ to $\mathbb{P}$).
+* Computationally simpler though.
+* The idea is we estimate the moments of $\mathbb{P}$ with the empirical moments $$ \widehat{m}_k = \frac{1}{n}\sum_{i=1}^nX_i^k $$
+* By LLN, these converge to the moments of $\mathbb{P}$ (provided the model is well specified).
+
+Here is how it works.  Suppose $\Theta \subset\mathbb{R}^d$ and write $$ M(\theta) = (m_1(\theta),\ldots,m_d(\theta)). $$ Assume $M$ is one-to-one, so that we can write $$ \theta = M^{-1}(m_1(\theta), \ldots, m_d(\theta)). $$  Then the _moments estimator_ is $$ \widehat{\theta}_n^{MM} = M^{-1}\big(\widehat{m}_1, \ldots, \widehat{m}_d\big). $$
+
+We can generalize this to other functions $g_1(x), \ldots, g_d(x)$ which specify $\theta$, i.e., $$ \theta = M^{-1}(m_1(\theta), \ldots, m_d(\theta)), $$ where for each $k$, $$ m_k(\theta) = \mathbb{E}_\theta[g_k(X)]. $$  Then the _generalized method of moments estimator_ is $$ \widehat{\theta}_n^{GMM} = M^{-1}\big(\widehat{m}_1, \ldots, \widehat{m}_d\big), $$ where for each $k$, $$ \widehat{m}_k = \frac{1}{n}\sum_{i=1}^ng_k(X_i). $$
+
+__Example:__ To see a simple example of why we might want to generalize beyond simply estimating moments directly, consider the normal distribution $N(\mu,\sigma^2)$.  The GMM estimator has $g_1(x) = x$ and $g_2(x) = x^2 - x$.
+
+### Asymptotic Normality of GMM estimators
+
+__Theorem:__
+* Assume $M$ is one-to-one and $M^{-1}$ is continuously differentiable in a neighborhood of $\theta^\ast$.
+* Let $\Sigma(\theta)$ be the covariance matrix of the vector $(g_1(X_1), \ldots, g_d(X_2)$ (assume this exists).
+
+Then $$ \sqrt{n}\big(\widehat{\theta}_n^{GMM} - \theta^\ast\big) \overset{(d)}{\to} N\big(0, \Gamma(\theta^\ast)\big) \; \text{w.r.t. }\mathbb{P_{\theta^\ast}}, $$ where $$ \Gamma(\theta) = \bigg[\frac{\partial M^{-1}}{\partial \theta}\big(M(\theta)\big)\bigg]^T\Sigma(\theta)\bigg[\frac{\partial M^{-1}}{\partial \theta}\big(M(\theta)\big)\bigg]. $$
+
+### MLE versus GMM
+
+* In general, the MLE is more accurate.
+* MLE still gives good results if model is misspecified
+* Computational issues: Sometimes, the MLE is intractable but MM is easier (polynomial equations)
+
 ## M-Estimation
 
 Suppose we are agnostic of any statistical model, and/or the quantity we are most interested in estimating is _not_ simply the parameter of a distribution.  In this case, we can still estimate the quantity by optimizing a suitable objective (e.g., minimizing a cost function).  This is called _M-Estimation_ (the M stands for maximum or minimum), and is the framework for "traditional" (not statistically motivated) machine learning.  The framework is as follows.
@@ -124,7 +149,7 @@ Examples:
 3. Let $E = \mathcal{M} = \mathbb{R}$ and let $\mu^\ast$ be the $\alpha$-quantile of $\mathbb{P}$.  Then an M-estimator is $\rho(x, \mu) = C_\alpha(x-\mu)$, where $$ C_\alpha(x) = \left\{\begin{matrix}-(1-\alpha)x & : & x < 0\\ \alpha x & : & x \geq 0\end{matrix}\right., $$ This function is called a _check function_.
 >
 
-### Properties of M-estimators
+### Asymptotic Normality of M-estimators
 
 In the case of MLE, we have asymptotic normality and known asymptotic variance (inverse fisher information).  To what extent do these properties generalize to M estimators?  It turns out they generalize quite well.  We will have asymptotic normality for M-estimators, and the asymptotic variance will have an expression only marginally less concise than that of the MLE (this is probably subject to some smoothness conditions on $\rho$).  First, we make the following definitions.  In one dimension, let $$ J(\mu) = \frac{\partial^2}{\partial\mu\partial\mu^T}Q(\mu) = \mathbb{E}\bigg[\frac{\partial^2}{\partial\mu\partial\mu^T}\rho(X_1,\mu)\bigg] $$ and let $$ K(\mu) = \text{Cov}\bigg[\frac{\partial}{\partial\mu}\rho(X_1,\mu)\bigg]. $$  In higher dimensions, $$ J(\mu) = \mathbb{E}[\mathbf{H}\rho] $$ is the expected curvature of loss and $$ K(\mu) = \text{Cov}[\nabla_\mu\rho(X_1,\mu)] $$ is the covariance matrix of the loss gradient (as a function of $\mu$ only).
 

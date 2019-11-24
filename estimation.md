@@ -111,3 +111,29 @@ __Remark:__ Recall the original definition of Fisher information as the Hessian 
 ## Method of Moments
 
 ## M-Estimation
+
+Suppose we are agnostic of any statistical model, and/or the quantity we are most interested in estimating is _not_ simply the parameter of a distribution.  In this case, we can still estimate the quantity by optimizing a suitable objective (e.g., minimizing a cost function).  This is called _M-Estimation_ (the M stands for maximum or minimum), and is the framework for "traditional" (not statistically motivated) machine learning.  The framework is as follows.
+1. Let $X_1, X_2, \ldots, X_n$ be an _iid_ sample from an unspecified probability distribution $\mathbb{P}$.
+2. Let $\mu^\ast$ be some parameter associated to the sample, e.g., some summary statistic.
+3. Find a function $\rho:E\times \mathcal{M}  \to \mathbb{R}$, where $\mathcal{M}$ is the set of all possible values for $\mu$, such that the function $$ Q(\mu) = \mathbb{E}(\rho(X_1, \mu)) $$ achieves its minimum (or maximum) at $\mu^\ast$.
+4. Replace the estimation with an average and proceed as with MLE.
+
+Examples:
+1. Let $E = \mathcal{M} = \mathbb{R}^d$ and let $\mu^\ast = \mathbb{E}(X)$.  An M-estimator is $\rho(x,\mu) = \lVert x - \mu \rVert_2^2$.
+2. Let $E = \mathcal{M} = \mathbb{R}^d$ and let $\mu^\ast$ be a median of $\mathbb{P}$.  An M-estimator is $\rho(x,\mu) = \lVert x - \mu \rVert_1^1$.
+3. Let $E = \mathcal{M} = \mathbb{R}$ and let $\mu^\ast$ be the $\alpha$-quantile of $\mathbb{P}$.  Then an M-estimator is $\rho(x, \mu) = C_\alpha(x-\mu)$, where $$ C_\alpha(x) = \left\{\begin{matrix}-(1-\alpha)x & : & x < 0\\ \alpha x & : & x \geq 0\end{matrix}\right., $$ This function is called a _check function_.
+>
+
+### Properties of M-estimators
+
+In the case of MLE, we have asymptotic normality and known asymptotic variance (inverse fisher information).  To what extent do these properties generalize to M estimators?  It turns out they generalize quite well.  We will have asymptotic normality for M-estimators, and the asymptotic variance will have an expression only marginally less concise than that of the MLE (this is probably subject to some smoothness conditions on $\rho$).  First, we make the following definitions.  In one dimension, let $$ J(\mu) = \frac{\partial^2}{\partial\mu\partial\mu^T}Q(\mu) = \mathbb{E}\bigg[\frac{\partial^2}{\partial\mu\partial\mu^T}\rho(X_1,\mu)\bigg] $$ and let $$ K(\mu) = \text{Cov}\bigg[\frac{\partial}{\partial\mu}\rho(X_1,\mu)\bigg]. $$  In higher dimensions, $$ J(\mu) = \mathbb{E}[\mathbf{H}\rho] $$ is the expected curvature of loss and $$ K(\mu) = \text{Cov}[\nabla_\mu\rho(X_1,\mu)] $$ is the covariance matrix of the loss gradient (as a function of $\mu$ only).
+
+__Remark:__ In the case of MLE, $J(\theta) = K(\theta) = I(\theta)$.
+
+__Theorem:__ With notation as above, assume the following.
+1. $\mu^\ast$ is the unique minimizer of $Q$;
+2. $J(\mu) is invertible in a neighborhood of $\mu^\ast$;
+3. A "few more technical conditions." (e.g., twice-differentiability of $\rho$, inverse of $J$ is continuous, etc.).
+Then $\widehat{\mu}_n$ satisfies $$ \widehat{\mu}_n \overset{(p)}{\to} \mu^\ast $$ and $$ \sqrt{n}(\widehat{\mu}_n - \mu^\ast) \overset{(d)}{\to} N\big(0, J(\mu^\ast)^{-1} K(\mu^\ast) J(\mu^\ast)^{-1}\big). $$
+
+The proof of this theorem is very similar to the MLE case in one dimension.  __TODO:__ Find a proof for higher dimensions, or at least a sketch of one.

@@ -14,7 +14,7 @@ Essentially, the above limit was a statement of the form...
 
 ### The $\chi^2$ and $t$ Distributions
 
-Set the following notation.  Let $$ S_n = \frac{1}{n}\sum_{i=1}^n(X_i^2 - \bar{X}_n)^2 $$ be the sample variance of a sample of $n$ independent Gaussian random variables with variance $\sigma^2$, and let $$ \tilde{S}_n = \frac{1}{n-1}\sum_{i=1}^n(X_i^2 - \bar{X}_n)^2 = \frac{n}{n-1}S_n $$ be the unbiased estimator of sample variance.
+Set the following notation.  Let $$ S_n = \frac{1}{n}\sum_{i=1}^n(X_i - \bar{X}_n)^2 $$ be the sample variance of a sample of $n$ independent Gaussian random variables with variance $\sigma^2$, and let $$ \tilde{S}_n = \frac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X}_n)^2 = \frac{n}{n-1}S_n $$ be the unbiased estimator of sample variance.
 
 #### The $\chi^2$ Distributions
 
@@ -52,6 +52,6 @@ Note that under the null, we have $$ T_n = \frac{\sqrt{n}\frac{\bar{X}_n - \mu_0
 Returning to out cholesterol example, we can consider the scenario of testing for the difference of means of two samples using a $t$ distribution.  As our null hypothesis is that $\Delta_d \geq \Delta_c$, or equivalently that $\Delta_d - \Delta_c \geq 0$, we have a test statistic of the form $$ T_{m,n} = \frac{\bar{X}_n - \bar{Y}_n}{\sqrt{\frac{\hat{\sigma}^2_d}{n} + \frac{\hat{\sigma}^2_c}{m}}}. $$ Thus, this is a one-sided example of the _Welch $t$-test_.  This is opposed to the Student's $t$-test, where the test statistic follows a $t$ distribution.  In this case, the test statistic is approximately a $t$-distribution, particularly because the denominator involves something that is _approximately_ (and very nearly so) a $\chi^2$ distribution.
 
 __Theorem (Welch-Satterthwaite):__
-We have $T_{m,n} \approx t_N$, where $$ N = \frac{(\hat{\sigma}^2_d/n + \hat{\sigma}^2_c/m)^2}{\sqrt{\frac{\hat{\sigma}^4_d}{n^2(n-1)} + \frac{\hat{\sigma}^4_c}{m^2(m-1)}}} \geq \min(n,m). $$
+We have $T_{m,n} \approx t_N$, where $$ N = \frac{(\hat{\sigma}^2_d/n + \hat{\sigma}^2_c/m)^2}{\frac{\hat{\sigma}^4_d}{n^2(n-1)} + \frac{\hat{\sigma}^4_c}{m^2(m-1)}}\geq \min(n,m). $$
 
 __Remark:__ If the variances are known to be equal, the test statistic becomes exactly a $t$ distribution, hence the test becomes a two sample Student's $t$-test.

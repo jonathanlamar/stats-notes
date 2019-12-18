@@ -6,7 +6,7 @@ Since I have sworn never to compile a LaTeX document again, I am taking notes in
 markdown and compiling with pandoc.  Compile with the command
 
 ```bash
-./mdpdf -i <FILE>.md
+./mdpdf <FILE>.md
 ```
 
 If you want to run a script in the background that recompiles every time you

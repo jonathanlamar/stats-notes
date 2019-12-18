@@ -109,3 +109,68 @@ __Theorem (Welch-Satterthwaite):__ We have $T_{m,n} \approx t_N$, where $$ N =
 __Remark:__ If the variances are known to be equal, the test statistic becomes
 exactly a $t$ distribution, hence the test becomes a two sample Student's
 $t$-test.
+
+## Tests based on MLEs
+
+Briefly, these are some other tests.
+
+### Wald's Test
+
+Consider an _iid_ sample $X_1, \ldots, X_n$ with statistical model
+$(E,\{\mathbb{P}_\theta\}_{\theta\in\Theta})$, where
+$\Theta\subseteq\mathbb{R}^d$ and let $\theta_0$ be fixed and given.  Let
+$\theta^\ast$ be the true parameter under the model.  Consider the null
+hypothesis $H_0: \theta^\ast = \theta_0$ and let $\hat{\theta}_n$ be the MLE.
+
+If $H_0$ is true, then by CLT, we have
+$$
+\sqrt{n}I(\theta_0)^{\frac{1}{2}}\cdot\big(\hat{\theta}_n - \theta_0)
+\overset{(d)}{\to} N(0, I_d).
+$$
+Hence, by plugging in the MLE into the Fisher information, we have a test
+statistic $T_n$ such that
+$$
+\underbrace{n\big(\hat{\theta}_n-\theta_0)^TI(\hat{\theta}_n)(\hat{\theta}_n-
+\theta_0)}_{T_n} \overset{(d)}{\to} \chi_d^2.
+$$
+
+__Definition:__ _Wald's Test_ is any test (one or two sided) based on the above
+test statistic.
+
+### Wald's Test For Implicit Hypotheses
+
+Similar to above, suppose our null hypothesis is of the form $H_0: g(\theta)=0$
+for some continuously differentiable function $g:\mathbb{R}^d\to\mathbb{R}^k$
+(with $k<d$).  Suppose an asymptotically normal estimator $\hat{\theta}_n$ is
+available with asymptotic covariance $\Sigma(\theta) \in \mathbb{R}^{d\times d}$.
+Let
+$$
+\Gamma(\theta) = \nabla g(\theta)^T\Sigma(\theta)\nabla g(\theta)
+\in\mathbb{R}^{k\times k}.
+$$
+Then by the Delta method, we have
+$$
+\sqrt{n}\cdot \Gamma(\theta)^{\frac{1}{2}}\Big(g(\hat{\theta}_n) - g(\theta)\Big)
+\overset{(d)}{\to} N(0, I_k).
+$$
+By Slutskey's Theorem, we can plug $\hat{\theta}_n$ into $\Gamma$, hence we have
+a test statistic $T_n$ of the form
+$$
+\underbrace{n\cdot g(\hat{\theta}_n)^T\Gamma^{-1}(\hat{\theta}_n)\cdot
+g(\hat{\theta})}_{T_n} \overset{(d)}{\to} \chi^2_k.
+$$
+
+__Definition:__ _Wald's Test for Implicit Hypotheses_ is any test (one or two
+sided) based on the above test statistic for some function $g$.
+
+### Likelihood Ratio Test
+
+TODO
+
+## Goodness of Fit Tests
+
+### $\chi^2$ Test
+
+TODO
+
+TODO: Others here I barely remember from lecture.
